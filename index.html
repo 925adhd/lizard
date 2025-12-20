@@ -235,7 +235,7 @@
     <div class="container">
         <div class="emoji">🦎</div>
         <h1>LIZARD LIZARD</h1>
-        <button class="lizard-btn" onclick="addLizard()">CLICK ME</button>
+        <button class="lizard-btn" onclick="addLizard()" ontouchstart="addLizard(event)">CLICK ME</button>
         
         <div class="score-container">
             <div class="score-box" id="currentBox">
@@ -295,7 +295,12 @@
         
         let currentAudioIndex = 0;
 
-        function addLizard() {
+        function addLizard(event) {
+            // Prevent double-firing on mobile (both touch and click)
+            if (event && event.type === 'touchstart') {
+                event.preventDefault();
+            }
+            
             // Initialize audio on first click
             initializeAudio();
             
@@ -324,12 +329,27 @@
                 }, 500);
             }
             
-            // Play audio - allow queuing for rapid-fire effect
-            const utterance = new SpeechSynthesisUtterance('lizard');
-            utterance.rate = 1.8; // Fast enough for overlapping effect
-            utterance.pitch = 1.2;
-            utterance.volume = 1;
-            window.speechSynthesis.speak(utterance);
+            // Play audio - mobile-friendly approach
+            try {
+                // Cancel any ongoing speech to ensure new speech starts
+                window.speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance('lizard');
+                utterance.rate = 1.8;
+                utterance.pitch = 1.2;
+                utterance.volume = 1;
+                
+                // For mobile Safari - ensure voice is loaded
+                if (window.speechSynthesis.getVoices().length === 0) {
+                    window.speechSynthesis.addEventListener('voiceschanged', function() {
+                        window.speechSynthesis.speak(utterance);
+                    }, { once: true });
+                } else {
+                    window.speechSynthesis.speak(utterance);
+                }
+            } catch (e) {
+                console.log('Speech synthesis error:', e);
+            }
         }
 
         function resetScore() {
