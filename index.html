@@ -235,7 +235,7 @@
     <div class="container">
         <div class="emoji">🦎</div>
         <h1>LIZARD LIZARD</h1>
-        <button class="lizard-btn" onclick="addLizard()" ontouchstart="addLizard(event)">CLICK ME</button>
+        <button class="lizard-btn">CLICK ME</button>
         
         <div class="score-container">
             <div class="score-box" id="currentBox">
@@ -273,36 +273,18 @@
         // Display initial high score
         document.getElementById('highScore').textContent = highScore;
 
-        // Create a pool of audio instances for faster playback
-        const audioPool = [];
-        const poolSize = 10;
-        
-        // Initialize audio pool on first user interaction
-        let audioInitialized = false;
-        
-        function initializeAudio() {
-            if (audioInitialized) return;
-            
-            for (let i = 0; i < poolSize; i++) {
-                const utterance = new SpeechSynthesisUtterance('lizard');
-                utterance.rate = 1.5;
-                utterance.pitch = 1.1;
-                utterance.volume = 1;
-                audioPool.push(utterance);
-            }
-            audioInitialized = true;
-        }
-        
-        let currentAudioIndex = 0;
+        // Track if we've processed a click recently to prevent double-firing
+        let processing = false;
 
         function addLizard(event) {
-            // Prevent double-firing on mobile (both touch and click)
-            if (event && event.type === 'touchstart') {
-                event.preventDefault();
+            // Prevent double-firing
+            if (processing) {
+                if (event) event.preventDefault();
+                return;
             }
             
-            // Initialize audio on first click
-            initializeAudio();
+            processing = true;
+            if (event) event.preventDefault();
             
             // Update current clicks
             currentClicks++;
@@ -329,34 +311,30 @@
                 }, 500);
             }
             
-            // Play audio - mobile-friendly approach
+            // Play audio
+            playLizardSound();
+            
+            // Reset processing flag after a short delay
+            setTimeout(() => {
+                processing = false;
+            }, 100);
+        }
+
+        function playLizardSound() {
             try {
-                // Cancel any ongoing speech to ensure new speech starts
-                window.speechSynthesis.cancel();
-                
                 const utterance = new SpeechSynthesisUtterance('lizard');
                 utterance.rate = 1.8;
                 utterance.pitch = 1.2;
-                utterance.volume = 1;
-                
-                // For mobile Safari - ensure voice is loaded
-                if (window.speechSynthesis.getVoices().length === 0) {
-                    window.speechSynthesis.addEventListener('voiceschanged', function() {
-                        window.speechSynthesis.speak(utterance);
-                    }, { once: true });
-                } else {
-                    window.speechSynthesis.speak(utterance);
-                }
+                utterance.volume = 1.0;
+                window.speechSynthesis.speak(utterance);
             } catch (e) {
-                console.log('Speech synthesis error:', e);
+                console.error('Speech error:', e);
             }
         }
 
         function resetScore() {
             currentClicks = 0;
             document.getElementById('currentScore').textContent = currentClicks;
-            
-            // Stop all text-to-speech audio
             window.speechSynthesis.cancel();
         }
 
@@ -365,11 +343,28 @@
                 highScore = 0;
                 localStorage.setItem('lizardHighScore', highScore);
                 document.getElementById('highScore').textContent = highScore;
-                
-                // Stop all text-to-speech audio
                 window.speechSynthesis.cancel();
             }
         }
+
+        // Add touch event listener to button
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('.lizard-btn');
+            
+            // Remove inline handlers and use event listeners instead
+            button.onclick = null;
+            button.ontouchstart = null;
+            
+            // Add click listener
+            button.addEventListener('click', function(e) {
+                addLizard(e);
+            }, { passive: false });
+            
+            // Add touch listener for mobile
+            button.addEventListener('touchend', function(e) {
+                addLizard(e);
+            }, { passive: false });
+        });
     </script>
 </body>
 </html>
