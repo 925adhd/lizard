@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LIZARD LIZARD LIZARD</title>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     <style>
         * {
             margin: 0;
@@ -369,6 +370,18 @@
         </div>
     </div>
 
+    <!-- Hidden SoundCloud Audio -->
+    <iframe 
+        id="lizardAudio"
+        width="0" 
+        height="0" 
+        scrolling="no" 
+        frameborder="no" 
+        allow="autoplay" 
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2233495598&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+        style="display: none;">
+    </iframe>
+
     <!-- Custom Modal -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
@@ -449,26 +462,26 @@
 
         function playLizardSound() {
             try {
-                const utterance = new SpeechSynthesisUtterance('lizard');
-                utterance.rate = 1.8;
-                utterance.pitch = 1.2;
-                utterance.volume = 1.0;
-                window.speechSynthesis.speak(utterance);
+                // Get the iframe element
+                const iframe = document.getElementById('lizardAudio');
+                const widget = SC.Widget(iframe);
+                
+                // Seek to beginning and play
+                widget.seekTo(0);
+                widget.play();
             } catch (e) {
-                console.error('Speech error:', e);
+                console.error('Audio error:', e);
             }
         }
 
         function resetScore() {
             currentClicks = 0;
             document.getElementById('currentScore').textContent = currentClicks;
-            window.speechSynthesis.cancel();
         }
 
         function resetHighScore() {
             // Show custom modal instead of browser confirm
             document.getElementById('modalOverlay').classList.add('active');
-            window.speechSynthesis.cancel();
         }
 
         function closeModal() {
