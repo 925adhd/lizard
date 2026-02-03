@@ -188,12 +188,6 @@
         .emoji {
             font-size: 8rem;
             margin-bottom: 1rem;
-            animation: bounce 1s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
         }
 
         /* Modal Styles */
@@ -349,7 +343,7 @@
     <div class="stars" id="stars"></div>
 
     <div class="container">
-        <div class="emoji">🦎</div>
+        <div class="emoji"><img src="assets/tom.png" alt="Tom" style="height: 1em; width: auto;"></div>
         <h1>LIZARD LIZARD</h1>
         <button class="lizard-btn">CLICK ME</button>
 
@@ -462,20 +456,13 @@
 
         function playLizardSound() {
             try {
-                const utterance = new SpeechSynthesisUtterance('lizard');
-                utterance.rate = 1.8;
-                utterance.pitch = 1.2;
-                utterance.volume = 1.0;
-                window.speechSynthesis.speak(utterance);
-                // Get the iframe element
                 const iframe = document.getElementById('lizardAudio');
                 const widget = SC.Widget(iframe);
-                
+
                 // Seek to beginning and play
                 widget.seekTo(0);
                 widget.play();
             } catch (e) {
-                console.error('Speech error:', e);
                 console.error('Audio error:', e);
             }
         }
@@ -483,13 +470,13 @@
         function resetScore() {
             currentClicks = 0;
             document.getElementById('currentScore').textContent = currentClicks;
-            window.speechSynthesis.cancel();
+
         }
 
         function resetHighScore() {
             // Show custom modal instead of browser confirm
             document.getElementById('modalOverlay').classList.add('active');
-            window.speechSynthesis.cancel();
+
         }
 
         function closeModal() {
