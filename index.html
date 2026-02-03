@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LIZARD LIZARD LIZARD</title>
-
-    <!-- Favicon using a lizard emoji as an inline SVG data URL -->
-    <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text x='50' y='42' font-size='42' text-anchor='middle' dominant-baseline='middle'>🦎</text></svg>">
-
+    <script src="https://w.soundcloud.com/player/api.js"></script>
     <style>
         * {
             margin: 0;
@@ -191,6 +188,114 @@
         .emoji {
             font-size: 8rem;
             margin-bottom: 1rem;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+            border: 4px solid #ff0000;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 
+                0 0 30px rgba(255, 0, 0, 0.5),
+                0 10px 40px rgba(0, 0, 0, 0.8);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #ff0000;
+            text-shadow: 
+                0 0 10px #ff0000,
+                2px 2px 0 #000,
+                -2px -2px 0 #000,
+                2px -2px 0 #000,
+                -2px 2px 0 #000;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .modal-text {
+            font-family: Arial, sans-serif;
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            cursor: pointer;
+            border-radius: 10px;
+            border: 3px solid;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .modal-btn-confirm {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff0000;
+            color: #ff0000;
+        }
+
+        .modal-btn-confirm:hover {
+            background: rgba(255, 0, 0, 0.5);
+            transform: scale(1.05);
+        }
+
+        .modal-btn-cancel {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #00ff00;
+            color: #00ff00;
+        }
+
+        .modal-btn-cancel:hover {
+            background: rgba(0, 255, 0, 0.5);
+            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -224,17 +329,30 @@
                 padding: 6px 12px;
                 font-size: 0.8rem;
             }
+            .modal {
+                padding: 1.5rem;
+            }
+            .modal-title {
+                font-size: 1.2rem;
+            }
+            .modal-text {
+                font-size: 1rem;
+            }
+            .modal-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="stars" id="stars"></div>
-    
+
     <div class="container">
-        <div class="emoji"><img src="assets/tom.png" alt="Tom" style="height: 1em; width: auto;"></div>
+        <div class="emoji">🦎</div>
         <h1>LIZARD LIZARD</h1>
-        <button class="lizard-btn" onclick="addLizard()">CLICK ME</button>
-        
+        <button class="lizard-btn">CLICK ME</button>
+
         <div class="score-container">
             <div class="score-box" id="currentBox">
                 <div class="score-label">CURRENT CLICKS</div>
@@ -249,6 +367,30 @@
         <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap;">
             <button class="reset-btn" onclick="resetScore()">Reset Counter</button>
             <button class="reset-btn" onclick="resetHighScore()">Reset High Score</button>
+        </div>
+    </div>
+
+    <!-- Hidden SoundCloud Audio -->
+    <iframe 
+        id="lizardAudio"
+        width="0" 
+        height="0" 
+        scrolling="no" 
+        frameborder="no" 
+        allow="autoplay" 
+        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2233495598&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+        style="display: none;">
+    </iframe>
+
+    <!-- Custom Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-title">⚠️ Confirm Reset</div>
+            <div class="modal-text">Are you sure you want to reset your high score?</div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmResetHighScore()">Reset</button>
+            </div>
         </div>
     </div>
 
@@ -267,53 +409,40 @@
         // Initialize scores
         let currentClicks = 0;
         let highScore = parseInt(localStorage.getItem('lizardHighScore')) || 0;
-        
+
         // Display initial high score
         document.getElementById('highScore').textContent = highScore;
 
-        // Create a pool of audio instances for faster playback
-        const audioPool = [];
-        const poolSize = 10;
-        
-        // Initialize audio pool on first user interaction
-        let audioInitialized = false;
-        
-        function initializeAudio() {
-            if (audioInitialized) return;
-            
-            for (let i = 0; i < poolSize; i++) {
-                const utterance = new SpeechSynthesisUtterance('lizard');
-                utterance.rate = 1.5;
-                utterance.pitch = 1.1;
-                utterance.volume = 1;
-                audioPool.push(utterance);
-            }
-            audioInitialized = true;
-        }
-        
-        let currentAudioIndex = 0;
+        // Track if we've processed a click recently to prevent double-firing
+        let processing = false;
 
-        function addLizard() {
-            // Initialize audio on first click
-            initializeAudio();
-            
+        function addLizard(event) {
+            // Prevent double-firing
+            if (processing) {
+                if (event) event.preventDefault();
+                return;
+            }
+
+            processing = true;
+            if (event) event.preventDefault();
+
             // Update current clicks
             currentClicks++;
             const currentScoreElement = document.getElementById('currentScore');
             currentScoreElement.textContent = currentClicks;
-            
+
             // Trigger flash animation
             currentScoreElement.style.animation = 'none';
             setTimeout(() => {
                 currentScoreElement.style.animation = 'scoreFlash 0.3s ease-out';
             }, 10);
-            
+
             // Check and update high score
             if (currentClicks > highScore) {
                 highScore = currentClicks;
                 localStorage.setItem('lizardHighScore', highScore);
                 document.getElementById('highScore').textContent = highScore;
-                
+
                 // Flash the high score box
                 const highScoreBox = document.getElementById('highScoreBox');
                 highScoreBox.classList.add('new-record');
@@ -321,33 +450,84 @@
                     highScoreBox.classList.remove('new-record');
                 }, 500);
             }
-            
-            // Play audio - allow queuing for rapid-fire effect
-            const utterance = new SpeechSynthesisUtterance('lizard');
-            utterance.rate = 1.8; // Fast enough for overlapping effect
-            utterance.pitch = 1.2;
-            utterance.volume = 1;
-            window.speechSynthesis.speak(utterance);
+
+            // Play audio
+            playLizardSound();
+
+            // Reset processing flag after a short delay
+            setTimeout(() => {
+                processing = false;
+            }, 100);
+        }
+
+        function playLizardSound() {
+            try {
+                const utterance = new SpeechSynthesisUtterance('lizard');
+                utterance.rate = 1.8;
+                utterance.pitch = 1.2;
+                utterance.volume = 1.0;
+                window.speechSynthesis.speak(utterance);
+                // Get the iframe element
+                const iframe = document.getElementById('lizardAudio');
+                const widget = SC.Widget(iframe);
+                
+                // Seek to beginning and play
+                widget.seekTo(0);
+                widget.play();
+            } catch (e) {
+                console.error('Speech error:', e);
+                console.error('Audio error:', e);
+            }
         }
 
         function resetScore() {
             currentClicks = 0;
             document.getElementById('currentScore').textContent = currentClicks;
-            
-            // Stop all text-to-speech audio
             window.speechSynthesis.cancel();
         }
 
         function resetHighScore() {
-            if (confirm('Are you sure you want to reset your high score?')) {
-                highScore = 0;
-                localStorage.setItem('lizardHighScore', highScore);
-                document.getElementById('highScore').textContent = highScore;
-                
-                // Stop all text-to-speech audio
-                window.speechSynthesis.cancel();
-            }
+            // Show custom modal instead of browser confirm
+            document.getElementById('modalOverlay').classList.add('active');
+            window.speechSynthesis.cancel();
         }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        function confirmResetHighScore() {
+            highScore = 0;
+            localStorage.setItem('lizardHighScore', highScore);
+            document.getElementById('highScore').textContent = highScore;
+            closeModal();
+        }
+
+        // Close modal when clicking outside of it
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Add touch event listener to button
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.querySelector('.lizard-btn');
+
+            // Remove inline handlers and use event listeners instead
+            button.onclick = null;
+            button.ontouchstart = null;
+
+            // Add click listener
+            button.addEventListener('click', function(e) {
+                addLizard(e);
+            }, { passive: false });
+
+            // Add touch listener for mobile
+            button.addEventListener('touchend', function(e) {
+                addLizard(e);
+            }, { passive: false });
+        });
     </script>
 </body>
 </html>
