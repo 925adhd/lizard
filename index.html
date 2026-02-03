@@ -52,28 +52,7 @@
             position: relative;
         }
 
-        h1 {
-            font-size: 4rem;
-            color: #00ff00;
-            text-shadow: 
-                0 0 10px #00ff00,
-                0 0 20px #00ff00,
-                0 0 30px #00ff00,
-                3px 3px 0 #000,
-                -3px -3px 0 #000,
-                3px -3px 0 #000,
-                -3px 3px 0 #000;
-            margin-bottom: 2rem;
-            letter-spacing: 0.1em;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .lizard-btn {
+.lizard-btn {
             background: linear-gradient(145deg, #00ff00, #00cc00);
             border: 4px solid #000;
             padding: 30px 60px;
@@ -188,7 +167,14 @@
 
         .emoji {
             font-size: 8rem;
-            margin-bottom: 1rem;
+            margin-bottom: -2rem;
+            position: relative;
+            z-index: 1;
+            transform: translateY(-5px);
+        }
+
+        .emoji img {
+            height: 10rem !important;
         }
 
         /* Modal Styles */
@@ -304,7 +290,10 @@
             }
             .emoji {
                 font-size: 5rem;
-                margin-bottom: 0.5rem;
+                margin-bottom: -1.5rem;
+            }
+            .emoji img {
+                height: 7rem !important;
             }
             .score-container {
                 margin-top: 1rem;
@@ -345,7 +334,7 @@
 
     <div class="container">
         <div class="emoji"><img src="assets/tom.png" alt="Tom" style="height: 1em; width: auto;"></div>
-        <h1>LIZARD LIZARD</h1>
+
         <button class="lizard-btn">CLICK ME</button>
 
         <div class="score-container">
