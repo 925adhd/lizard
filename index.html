@@ -6,7 +6,6 @@
     <title>LIZARD LIZARD LIZARD</title>
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
     <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
-    <script src="https://w.soundcloud.com/player/api.js"></script>
     <style>
         * {
             margin: 0;
@@ -366,18 +365,6 @@
         </div>
     </div>
 
-    <!-- Hidden SoundCloud Audio -->
-    <iframe 
-        id="lizardAudio"
-        width="0" 
-        height="0" 
-        scrolling="no" 
-        frameborder="no" 
-        allow="autoplay" 
-        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2233495598&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
-        style="display: none;">
-    </iframe>
-
     <!-- Custom Modal -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
@@ -456,17 +443,29 @@
             }, 100);
         }
 
-        function playLizardSound() {
-            try {
-                const iframe = document.getElementById('lizardAudio');
-                const widget = SC.Widget(iframe);
+        // Pre-load audio into memory using Web Audio API for instant playback
+        let audioCtx = null;
+        let audioBuffer = null;
 
-                // Seek to beginning and play
-                widget.seekTo(0);
-                widget.play();
-            } catch (e) {
-                console.error('Audio error:', e);
-            }
+        fetch('assets/lizard.mp3')
+            .then(res => res.arrayBuffer())
+            .then(data => {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                return audioCtx.decodeAudioData(data);
+            })
+            .then(buffer => {
+                audioBuffer = buffer;
+            })
+            .catch(e => console.error('Audio load error:', e));
+
+        function playLizardSound() {
+            if (!audioBuffer || !audioCtx) return;
+            // Resume context if suspended (browser autoplay policy)
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const source = audioCtx.createBufferSource();
+            source.buffer = audioBuffer;
+            source.connect(audioCtx.destination);
+            source.start(0);
         }
 
         function resetScore() {
