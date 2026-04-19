@@ -3,7 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIZARD LIZARD LIZARD</title>
+    <title>Lizard Lizard Lizard — The Ultimate Lizard Clicker Game</title>
+    <meta name="description" content="Click the lizard. Hear the lizard. Beat your high score. Lizard Lizard Lizard is a free, addictive one-button clicker game with sound effects and a persistent high score.">
+    <meta name="keywords" content="lizard, clicker game, click game, lizard clicker, browser game, free game, high score">
+    <meta name="author" content="studio 925">
+    <link rel="canonical" href="https://lizardlizard.ai/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lizardlizard.ai/">
+    <meta property="og:title" content="Lizard Lizard Lizard — The Ultimate Lizard Clicker Game">
+    <meta property="og:description" content="Click the lizard. Hear the lizard. Beat your high score. A free, addictive one-button clicker game.">
+    <meta property="og:image" content="https://lizardlizard.ai/assets/tom.png">
+    <meta property="og:site_name" content="Lizard Lizard Lizard">
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://lizardlizard.ai/">
+    <meta name="twitter:title" content="Lizard Lizard Lizard — The Ultimate Lizard Clicker Game">
+    <meta name="twitter:description" content="Click the lizard. Hear the lizard. Beat your high score. A free, addictive one-button clicker game.">
+    <meta name="twitter:image" content="https://lizardlizard.ai/assets/tom.png">
+
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
     <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
     <style>
@@ -20,9 +40,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            justify-content: flex-start;
             position: relative;
+        }
+
+        .stars {
+            position: fixed !important;
         }
 
         .stars {
@@ -50,6 +73,15 @@
             text-align: center;
             z-index: 10;
             position: relative;
+            min-height: 100vh;
+            min-height: 100dvh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            box-sizing: border-box;
         }
 
 .lizard-btn {
@@ -163,6 +195,85 @@
         .reset-btn:hover {
             background: rgba(255, 0, 0, 0.5);
             transform: scale(1.05);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #00ff00;
+            text-shadow:
+                0 0 20px #00ff00,
+                3px 3px 0 #000,
+                -3px -3px 0 #000,
+                3px -3px 0 #000,
+                -3px 3px 0 #000;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .tagline {
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+
+        .about-section {
+            max-width: 600px;
+            margin: 3rem auto 4rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(0, 255, 0, 0.4);
+            border-radius: 15px;
+            font-family: Arial, sans-serif;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: left;
+            position: relative;
+            z-index: 10;
+        }
+
+        .about-section h2 {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: 1.3rem;
+            color: #00ff00;
+            text-shadow:
+                0 0 8px #00ff00,
+                1px 1px 0 #000;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .about-section h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .about-section .tagline {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .about-section p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+        }
+
+        .about-section a {
+            color: #00ff00;
+            text-decoration: none;
+        }
+
+        .about-section a:hover {
+            color: #ffff00;
+            text-shadow: 0 0 8px #ffff00;
         }
 
         .emoji {
@@ -333,9 +444,9 @@
     <div class="stars" id="stars"></div>
 
     <div class="container">
-        <div class="emoji"><img src="assets/tom.png" alt="Tom" style="height: 1em; width: auto;"></div>
+        <div class="emoji"><img src="assets/tom.png" alt="Tom the Lizard" style="height: 1em; width: auto;"></div>
 
-        <button class="lizard-btn">CLICK ME</button>
+        <button class="lizard-btn" aria-label="Click the lizard">CLICK ME</button>
 
         <div class="score-container">
             <div class="score-box" id="currentBox">
@@ -353,6 +464,20 @@
             <button class="reset-btn" onclick="resetHighScore()">Reset High Score</button>
         </div>
     </div>
+
+    <section class="about-section" aria-label="About Lizard Lizard Lizard">
+        <h1>Lizard Lizard Lizard</h1>
+        <p class="tagline">The ultimate one-button lizard clicker. Click the lizard, hear the lizard, beat your high score.</p>
+
+        <h2>About the Game</h2>
+        <p>Lizard Lizard Lizard is a free browser-based clicker game featuring Tom the Lizard. Every click makes a sound and bumps your counter. Your high score is saved locally, so you can keep trying to beat your personal best.</p>
+        <h2>How to Play</h2>
+        <p>Click the big green button as many times as you can. Each click plays a lizard sound and adds to your counter. Beat your previous record and the high score updates automatically. Use the reset buttons to start over.</p>
+        <h2>Features</h2>
+        <p>Instant audio feedback, persistent high score tracking, mobile-friendly touch support, and an animated starfield background. No ads, no sign-up, no tracking — just lizards.</p>
+        <h2>Credits</h2>
+        <p>Designed and built by <a href="https://studio925.design" target="_blank" rel="noopener">studio 925</a>.</p>
+    </section>
 
     <!-- Custom Modal -->
     <div class="modal-overlay" id="modalOverlay">
