@@ -1,0 +1,18 @@
+# Lizard Lizard Lizard
+
+> A free browser-based lizard clicker game. Click the lizard, hear the lizard, beat your high score.
+
+Lizard Lizard Lizard (lizardlizard.ai) is a single-page clicker game featuring Tom the Lizard. Every click plays a sound and increases a click counter; the all-time high score is saved locally in the visitor's browser. The game is free, has no ads, no sign-up, and no tracking.
+
+## Key facts
+- Game type: one-button clicker game
+- Character: Tom the Lizard
+- Cost: free, no sign-up required
+- Platform: works in any modern browser, desktop and mobile
+- Data: high score stored in browser localStorage only, not transmitted anywhere
+
+## Pages
+- [Homepage](https://lizardlizard.ai/): the game itself, plus About, How to Play, Features, FAQ, and Credits sections
+
+## Credits
+Designed and built by [studio 925](https://studio925.design).
